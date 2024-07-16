@@ -1,9 +1,9 @@
 import { Calendar } from "primereact/calendar";
 
-function DatePickerElem({date = new Date(), setDate}: {date: Date, setDate: (value: string) => void;}) {
 
-    return ( 
-        <Calendar value={date} onChange={(e) => setDate(e.value as any)}  />
+function DatePickerElem({date = new Date(), setDate}: {date?: Date, setDate: (value: any) => void}) {
+    return (
+        <Calendar value={date} onChange={(date) => setDate(date.value?.toLocaleDateString())}/>
     )
 }
 

@@ -6,6 +6,9 @@ import reportWebVitals from './reportWebVitals';
 import { PrimeReactProvider } from 'primereact/api';
 import { DialogProvider } from './Context/DialogContext';
 // PrimeReact styles
+import 'primereact/resources/themes/lara-light-indigo/theme.css'; // Replace with your theme
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

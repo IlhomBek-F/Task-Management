@@ -1,17 +1,17 @@
 import { createContext, useContext, useState } from "react";
 
 export interface DialogContextValue {
-    show: boolean;
-    setShow: (show: boolean) => void;
+    value: {show: boolean, edit: boolean};
+    setShow: (value: {show: boolean, edit: boolean}) => void;
   }
 
-const DialogContext = createContext<DialogContextValue | undefined>(undefined);
+const DialogContext = createContext<DialogContextValue | undefined>({value: {show: false, edit: false}, setShow: () => {}});
 
 
 function DialogProvider({children}: any) {
-    const [show, setShow] = useState<boolean>(false);
+    const [value, setShow] = useState({show: false, edit: false});
 
-    return <DialogContext.Provider value={{show, setShow}}>
+    return <DialogContext.Provider value={{value, setShow}}>
         {children}
     </DialogContext.Provider>
 }

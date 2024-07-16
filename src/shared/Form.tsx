@@ -2,32 +2,66 @@ import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import ButtonElem from './Button';
 import DatePickerElem from './DatePicker';
+import { Controller, useForm } from 'react-hook-form';
 
-function Form({edit}: {edit?: boolean}) {
-    const handleClick = () => {
+interface FormProps {
+    updatingValue?: any,
+    edit: boolean,
+    handleCancelClick: () => void;
+    handleSaveClick?: (value: any) => void;
+    handleUpdateClick?: (value: any) => void;
+}
 
-    }
+function Form({updatingValue, edit, handleSaveClick, handleUpdateClick, handleCancelClick}: FormProps) {
+    const {assign = '', dueTo = new Date().toLocaleDateString(), task = '', id} = updatingValue || {};
+    const {control, register, getValues } = useForm({
+        defaultValues: { assign, dueTo, task}
+    })
+
+    const handleEvent = (() => {
+        if(handleSaveClick) {
+            return handleSaveClick
+        }
+
+        return handleUpdateClick
+    })() as Function
 
     return (
     <>
      <form>
          <label htmlFor="assign" className='flex flex-col mb-3'>Assign
-         <InputText id="assign" aria-describedby="username-help" className='mt-2'/>
+         <InputText id="assign" 
+                    aria-describedby="username-help" 
+                    className='mt-2' 
+                    {...register('assign', {required: true})}/>
          </label>
-         <label htmlFor="assign" className='flex flex-col mb-3'>Due to
-         <DatePickerElem date={new Date()} setDate={(value) => {}}/>
+         <label htmlFor="due" 
+                className='flex flex-col mb-3'>Due to
+        <Controller name='dueTo' 
+                    control={control}
+                    rules={{required: true}}
+                    render={({field}) => (
+                    <DatePickerElem setDate={field.onChange}/>
+                   )}
+                  />
          </label>
-         <label htmlFor="assign" className='flex flex-col mb-3'>Task
-         <InputTextarea  rows={5} cols={30} className='mt-2'/>
+         <label htmlFor="task" 
+                className='flex flex-col mb-3'>Task
+         <InputTextarea 
+                rows={5} 
+                cols={30} 
+                className='mt-2' 
+                {...register('task', {required: true})}/>
          </label>
       </form>
-      <div className=''>
-         <ButtonElem label={`${edit ? 'Edit' : 'New'} task`} 
+      <div className='float-right'>
+         <ButtonElem label={edit ? 'update' : 'save'}
+                     className="mr-2"
                      disabled={false} 
-                     handleClick={handleClick}/>
-         <ButtonElem label='Cancel' 
+                     handleClick={() => handleEvent({...getValues(), id})}/>
+         <ButtonElem label='cancel' 
                      disabled={false} 
-                     handleClick={handleClick}/>
+                     handleClick={() => handleCancelClick()}/>
       </div>
     </>
     )

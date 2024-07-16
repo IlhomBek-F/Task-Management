@@ -2,11 +2,9 @@ import { Dialog } from "primereact/dialog";
 import { DialogContextValue, useDialog } from "../Context/DialogContext";
 
 
-function DialogElem({children}: any) {
-    const {show, setShow} = useDialog() as DialogContextValue;
-
+function DialogElem({children, header}: any) {
     return (
-        <Dialog header="Header" visible={show} style={{ width: '25vw' }} onHide={() => setShow(false)}>
+        <Dialog header={header} visible={true} style={{ width: '25vw' }} closable={false} onHide={() => {}} draggable={false}>
                {{...children}}
         </Dialog>
     )

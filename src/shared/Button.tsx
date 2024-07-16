@@ -1,9 +1,9 @@
 import { Button } from 'primereact/button';
 
-function ButtonElem({label, disabled, handleClick}: {label: string, disabled: boolean, handleClick: () => void}) {
+function ButtonElem({label, disabled, className, handleClick}: {label: string, disabled: boolean, className?: string, handleClick: () => void}) {
 
     return (
-        <Button label={label} disabled={disabled} onClick={handleClick} size='small'/>
+        <Button label={label} className={className} disabled={disabled} onClick={handleClick} size='small'/>
     )
 }
 
