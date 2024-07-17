@@ -1,6 +1,4 @@
 import { Dialog } from "primereact/dialog";
-import { DialogContextValue, useDialog } from "../Context/DialogContext";
-
 
 function DialogElem({children, header}: any) {
     return (

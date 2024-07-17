@@ -18,13 +18,7 @@ function Form({updatingValue, edit, handleSaveClick, handleUpdateClick, handleCa
         defaultValues: { assign, dueTo, task}
     })
 
-    const handleEvent = (() => {
-        if(handleSaveClick) {
-            return handleSaveClick
-        }
-
-        return handleUpdateClick
-    })() as Function
+    const handleEvent = (edit ? handleUpdateClick : handleSaveClick) as Function
 
     return (
     <>
@@ -41,7 +35,7 @@ function Form({updatingValue, edit, handleSaveClick, handleUpdateClick, handleCa
                     control={control}
                     rules={{required: true}}
                     render={({field}) => (
-                    <DatePickerElem setDate={field.onChange}/>
+                    <DatePickerElem date={new Date(dueTo)} setDate={field.onChange}/>
                    )}
                   />
          </label>

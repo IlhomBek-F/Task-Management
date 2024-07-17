@@ -6,37 +6,29 @@ import DialogElem from "../shared/Dialog";
 import DatePickerElem from "../shared/DatePicker";
 import Form from "../shared/Form";
 import TaskTable from "./TaskTable";
-import { saveTask } from "../service";
+import { useDispatch, useSelector } from "react-redux";
+import { AsyncThunkMap, filterByDate, filterByStatus } from "../Slice/taskSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { StateModel } from "../core/models/state-model";
+import { TaskModel } from "../core/models/task-model";
+import { AsyncThunkType } from "../core/enums/async-thunk-type";
 
 function Header() {
-    const [selected, setSelected] = useState<number>(2);
+    const selectedStatus = useSelector((state: StateModel) => state.selectedStatus)
+    const dispatch = useDispatch<any>();
     const [show, setShow] = useState(false);
-    const [tasks, setTask] = useState([] as any);
     const date = new Date();
 
-    const handleSelect = (value: number) => {
-        setSelected(value);
-        if(value === 2) {
-          setTask(tasks);
-          return;
-        }
-
-        const filterByStatus = tasks.filter((task: any) => task.complete === Boolean(value))
-        setTask(filterByStatus);
-    }
-
-    const handleSaveClick = (data: any) => { 
+    const handleSaveClick = (data: TaskModel) => { 
         const newTask = {...data, completed: false, id: Math.floor(Math.random() * 21312)};
-        saveTask(newTask)
-         .then(() => {
-            setTask([...tasks, newTask]);
-            setShow(false);
-         })
-         .catch(console.log) 
+        
+        dispatch(AsyncThunkMap.get(AsyncThunkType.ADD_TASK)(newTask))
+        .then(unwrapResult)
+        .then(() => setShow(false))
     }
    
     const setDate = (value: string) => {
-          console.log('date', value)
+        dispatch(filterByDate(value))
     }
 
     return (
@@ -44,7 +36,7 @@ function Header() {
         <header className="flex justify-between items-center  bg-white w-[62rem] rounded-md p-2 mb-4">
            <h1 className="text-2xl">Tasks</h1>
             <div className="flex justify-between w-[29rem]">
-           <Select options={FILTER_BY_STATUS_OPTIONS} selected={selected} handleSelect={handleSelect} placeholder='Filter'/>
+           <Select options={FILTER_BY_STATUS_OPTIONS} selected={selectedStatus} handleSelect={(status: number) => dispatch(filterByStatus(status))} placeholder='Filter'/>
            <DatePickerElem date={date} setDate={setDate}/>
            <ButtonElem label="Add new" handleClick={() => setShow(true)} disabled={false}/>
            {show && (

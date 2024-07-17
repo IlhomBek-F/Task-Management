@@ -2,51 +2,52 @@ import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { Button } from "primereact/button";
 import { useEffect, useRef, useState } from "react";
-import { getTasks } from "../service";
 import DialogElem from "../shared/Dialog";
 import Form from "../shared/Form";
 import { confirmDialog } from "primereact/confirmdialog";
 import { Toast } from "primereact/toast";
+import { Skeleton } from "primereact/skeleton";
+import { useDispatch, useSelector } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { AsyncThunkMap } from "../Slice/taskSlice";
+import { StateModel } from "../core/models/state-model";
+import { AsyncThunkType } from "../core/enums/async-thunk-type";
+import { TaskModel } from "../core/models/task-model";
 
 function TaskTable() {
-    const toast = useRef<Toast>(null);
-    const [tasks, setTask] = useState([] as any);
+    const dispatch = useDispatch<any>();
+    const  loading = useSelector((state: StateModel) => state.loading);
+    const  tasks = useSelector((state: StateModel) => state.tasks);
     const [show, setShow] = useState({show: false, data: null});
-
+    const toast = useRef<Toast>(null);
+ 
     useEffect(() => {
-       getTasks()
-        .then((data: any) => setTask(data))
-        .catch(console.log)
+        dispatch(AsyncThunkMap.get(AsyncThunkType.FETCH_TASKS)())
     }, [])
 
-    const handleUpdateClick = (data: any) => {
-        const updatedTasks = tasks.map((task: any) => {
-            return data.id === task.id ? {...data} : task
-        });
-        
-        toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Task updated', life: 2000 });
-        setTask(updatedTasks); 
-        setShow({show: false, data: null})  
+    const handleUpdateClick = (data: TaskModel) => {
+        dispatch(AsyncThunkMap.get(AsyncThunkType.UPDATE_TASK)(data))
+        .unwrap(unwrapResult)
+        .then(() => {
+            toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Task updated', life: 2000 });
+            setShow({show: false, data: null})
+        })
     }
 
-    const handleComplete = (data: any) => {
-        const updatedTasks = tasks.map((task: any) => task.id === data.id ? {...task, complete: !task.complete} : task);
-
-        if(!data.complete) {
-            toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Task completed', life: 1000 });
-        }
-
-        setTask(updatedTasks)
+    const handleComplete = (data: TaskModel) => {
+        dispatch(AsyncThunkMap.get(AsyncThunkType.COMPLETE_TASK)(data.id))
+        .unwrap(unwrapResult)
+        .then(() => {
+            if(!data.completed) {
+                toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Task completed', life: 1000 });
+            }
+        })
     }
-
-    const handleDeleteTask = (deletedTaskId: number) => {
-        setTask(tasks.filter((task: any) => task.id !== deletedTaskId))
-     }
 
     const columnActions = (data: any) => {
       return (
         <>
-        <Button icon="pi pi-check-circle" rounded text severity={data.complete ? 'success' : 'secondary'} onClick={() => handleComplete(data)}/>
+        <Button icon="pi pi-check-circle" rounded text severity={data.completed ? 'success' : 'secondary'} onClick={() => handleComplete(data)}/>
         <Button icon="pi pi-pencil" rounded text onClick={() => setShow({show: true, data})}/>
         <Button icon="pi pi-times" rounded text severity="danger" aria-label="Cancel" onClick={() => deleteConfirm(data.id)}/>
         </>
@@ -61,7 +62,7 @@ function TaskTable() {
             defaultFocus: 'reject',
             acceptClassName: 'p-button-danger',
             draggable: false,
-            accept: () => handleDeleteTask(deletedTaskId),
+            accept: () => dispatch(AsyncThunkMap.get(AsyncThunkType.DELETE_TASK)(deletedTaskId)),
             reject: () => setShow({show: false, data: null})
         });
     };
@@ -71,13 +72,13 @@ function TaskTable() {
     return (
         <>
         <Toast ref={toast} />
-        <DataTable value={tasks} footer={tasks.length && footer || ''} emptyMessage={'No available tasks'}
+        <DataTable value={tasks} footer={!loading && tasks.length && footer || ''} emptyMessage={'No available tasks'}
                  dataKey="id">
-                <Column field="assign" header="Assigned"></Column>
-                <Column field="dueTo" header="Due To"></Column>
-                <Column field="task" header="Task"></Column>
+                <Column field="assign" header="Assigned" body={loading && <Skeleton />}></Column>
+                <Column field="dueTo" header="Due To" body={loading && <Skeleton />}></Column>
+                <Column field="task" header="Task" body={loading && <Skeleton />}></Column>
                 <Column field=""  headerStyle={{width: '180px'}} 
-                body={columnActions}
+                body={loading && <Skeleton /> || columnActions}
                 ></Column>
          </DataTable>
         {show.show && (

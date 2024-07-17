@@ -4,11 +4,12 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { PrimeReactProvider } from 'primereact/api';
-import { DialogProvider } from './Context/DialogContext';
 // PrimeReact styles
 import 'primereact/resources/themes/lara-light-indigo/theme.css'; // Replace with your theme
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
+import { Provider } from 'react-redux';
+import { store } from './store/taskStore';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -16,11 +17,11 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <PrimeReactProvider value={{ripple: true}}>
-        <DialogProvider>
-         <App />
-        </DialogProvider>
-    </PrimeReactProvider>
+    <Provider store={store}>
+      <PrimeReactProvider value={{ripple: true}}>
+          <App />
+      </PrimeReactProvider>
+    </Provider>
   </React.StrictMode>
 );
 
