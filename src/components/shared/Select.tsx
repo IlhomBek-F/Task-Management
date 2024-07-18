@@ -1,7 +1,8 @@
 import { Dropdown } from "primereact/dropdown";
+import React from "react";
 
 function Select({options, selected, handleSelect, placeholder}: any) {
-
+    console.log('rendered select')
     return (
         <div className="card flex justify-content-center">
         <Dropdown value={selected} onChange={(e) => handleSelect(e.value)} options={options} optionLabel="status"
@@ -9,5 +10,5 @@ function Select({options, selected, handleSelect, placeholder}: any) {
     </div>
     )
 }
-
-export default Select;
+const MemoizedComponent = React.memo(Select)
+export default MemoizedComponent;

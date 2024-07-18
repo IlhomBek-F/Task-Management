@@ -4,8 +4,7 @@ export async function getTasks() {
     try {
         const tasks = await new Promise((resolve, reject) => {
             setTimeout(() => {
-                const data = JSON.parse(localStorage.getItem('tasks') || '[]');
-                resolve(data)
+                resolve(getTasksFromStorage())
             }, 2000)
         })
         return tasks
@@ -16,13 +15,13 @@ export async function getTasks() {
 
 export async function saveTask(data: TaskModel) {
     try {
-        const tasks = await new Promise((resolve, reject) => {
-            const task = JSON.parse(localStorage.getItem('tasks') || '[]');
-            localStorage.setItem('tasks', JSON.stringify([...task, data]));
-            resolve([...task, data])
+        const res = await new Promise((resolve, reject) => {
+            const tasks = getTasksFromStorage();
+            addTasksToStorage(tasks)
+            resolve([...tasks, data])
         })
 
-        return tasks
+        return res
     } catch (error) {
         console.log(error)
     }
@@ -31,12 +30,8 @@ export async function saveTask(data: TaskModel) {
 export async function updateTask(task: TaskModel) {
     try {
         const data = await new Promise((resolve, reject) => {
-            const tasks = JSON.parse(localStorage.getItem('tasks') || '[]')
-                ?.map((t: TaskModel) => {
-                    return t.id === task.id ? { ...task } : t
-                });;
-
-            localStorage.setItem('tasks', JSON.stringify(tasks));
+            const tasks = getTasksFromStorage()?.map((t: TaskModel) => t.id === task.id ? { ...task } : t);
+            addTasksToStorage(tasks)
             resolve(tasks)
         })
         return data
@@ -48,9 +43,9 @@ export async function updateTask(task: TaskModel) {
 export async function deleteTask(id: number) {
     try {
         const data = await new Promise((resolve, reject) => {
-            const tasks = JSON.parse(localStorage.getItem('tasks') || '[]')
+            const tasks = getTasksFromStorage()
                 ?.filter((task: TaskModel) => task.id !== id);
-            localStorage.setItem('tasks', JSON.stringify(tasks));
+            addTasksToStorage(tasks)
 
             setTimeout(() => {
                 resolve(tasks)
@@ -65,14 +60,21 @@ export async function deleteTask(id: number) {
 export async function completeTask(id: number) {
     try {
         const data = await new Promise((resolve, reject) => {
-            const tasks = JSON.parse(localStorage.getItem('tasks') || '[]')
-                ?.map((task: TaskModel) => task.id === id ? { ...task, completed: !task.completed } : task);
-
-            localStorage.setItem('tasks', JSON.stringify(tasks));
+            const tasks = getTasksFromStorage()?.
+                map((task: TaskModel) => task.id === id ? { ...task, completed: !task.completed } : task);
+            addTasksToStorage(tasks)
             resolve(tasks)
         })
         return data
     } catch (error) {
         console.log(error)
     }
+}
+
+function addTasksToStorage(tasks: TaskModel[]) {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+export function getTasksFromStorage(): TaskModel[] {
+    return JSON.parse(localStorage.getItem('tasks') ?? '[]')
 }

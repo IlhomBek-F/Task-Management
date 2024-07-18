@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { FILTER_BY_STATUS_OPTIONS } from "../helpers"
 import ButtonElem from "./shared/Button"
 import Select from "./shared/Select"
@@ -20,17 +20,21 @@ function Header() {
     const [show, setShow] = useState(false);
     const date = new Date();
 
-    const handleSaveClick = (data: TaskModel) => { 
-        const newTask = {...data, completed: false, id: Math.floor(Math.random() * 21312)};
+    const handleSaveClick = useCallback((data: TaskModel) => { 
+        const newTask = { ...data, completed: false, id: Math.floor(Math.random() * 21312) };
         
         dispatch(AsyncThunkMap.get(AsyncThunkType.ADD_TASK)(newTask))
-        .then(unwrapResult)
-        .then(() => setShow(false))
-    }
-   
-    const setDate = (value: string) => {
-        dispatch(filterByDate(value))
-    }
+            .then(unwrapResult)
+            .then(() => setShow(false));
+    }, [dispatch]);
+
+    const setDate = useCallback((value: string) => {
+        dispatch(filterByDate(value));
+    }, [dispatch]);
+
+    const handleSelect = useCallback((status: number) => {
+        dispatch(filterByStatus(status));
+    }, [dispatch]);
 
     return (
     <section>
@@ -39,7 +43,7 @@ function Header() {
             <div className="container">
            <Select options={FILTER_BY_STATUS_OPTIONS} 
                    selected={selectedStatus} 
-                   handleSelect={(status: number) => dispatch(filterByStatus(status))} 
+                   handleSelect={handleSelect} 
                    placeholder='Filter'/>
            <DatePickerElem date={date} 
                            setDate={setDate}/>
