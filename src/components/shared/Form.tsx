@@ -3,7 +3,7 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import ButtonElem from './Button';
 import DatePickerElem from './DatePicker';
 import { Controller, useForm } from 'react-hook-form';
-import '../styles/form.css';
+import '../../styles/form.css';
 import { FormProps } from '../../core/models/form-props-model';
 
 function Form({updatingValue, edit, handleSaveClick, handleUpdateClick, handleCancelClick}: FormProps) {

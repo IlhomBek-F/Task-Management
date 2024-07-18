@@ -86,7 +86,7 @@ function TaskTable() {
                     <p data-pr-tooltip={task} 
                        data-pr-hidedelay={100}
                        data-pr-position="bottom" 
-                       className={`${task.length > 41 ? 'tooltip' : ''} ellipsis`}>{task}
+                       className={`${task?.length > 41 ? 'tooltip' : ''} ellipsis`}>{task}
                     </p>
                 </>
                 }}
