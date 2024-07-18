@@ -1,46 +1,74 @@
-# Getting Started with Create React App
+# Task Management App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+This Task Management App is a robust, user-friendly application designed to help you efficiently manage your tasks. Built with modern technologies, it provides a seamless and interactive experience for task management. The app leverages React for the frontend, Tailwind CSS for styling, Redux Toolkit for state management, and PrimeReact for UI components, ensuring a high-performance and visually appealing user interface.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Task Creation and Editing:** Easily create new tasks or edit existing ones with an intuitive form.
+- **Task Filtering:** Filter tasks based on their status (completed, date) to focus on what matters most.
+- **Task Completion:** Mark tasks as completed to keep track of your progress.
+- **Task Deletion:** Remove tasks that are no longer needed.
+- **Interactive UI:** Leveraging PrimeReact components for a polished and interactive user interface.
+- **Global State Management:** Using Redux Toolkit to handle the state of tasks across the application efficiently.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Technologies Used
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- **React:** A JavaScript library for building user interfaces.
+- **Tailwind CSS:** A utility-first CSS framework for rapidly building custom designs.
+- **Redux & Redux Toolkit:** A predictable state container for JavaScript apps, with tools to streamline the development process.
+- **PrimeReact:** A rich set of open-source UI components for React.
+- **TypeScript:** Superset of JavaScript that adds static types for improved code quality and maintainability.
 
-### `npm test`
+## Installation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1.  **Clone the repository:**
 
-### `npm run build`
+### git clone https://github.com/IlhomBek-F/task-management-app.git
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2.  **Install dependencies:**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### npm install
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3.  **Start the application:**
 
-### `npm run eject`
+### npm start
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+The app should now be running on http://localhost:3000
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Folder Structure
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+├── public/
+├── src/
+│ ├── components/
+│ │ ├── Header.tsx
+│ │ ├── TaskTable.tsx
+│ │ └── shared/
+│ │ ├── ButtonElem.tsx
+│ │ ├── DatePickerElem.tsx
+│ │ ├── DialogElem.tsx
+│ │ ├── Form.tsx
+│ │ └── Select.tsx
+│ ├── core/
+│ │ ├── enums/
+│ │ │ └── async-thunk-type.ts
+│ │ ├── models/
+│ │ │ └── form-props-model.ts
+│ │ │ └── state-model.ts
+│ │ │ └── task-model.ts
+│ ├── redux/
+│ │ ├── slices/
+│ │ │ └── tasksSlice.ts
+│ │ └── store.ts
+│ ├── App.tsx
+│ ├── index.tsx
+│ └── styles/
+│ └── index.css
+│ │ ├── data-table.css
+│ │ ├── form.css
+│ │ ├── header.css
+│ │ ├── index.css
+├── README.md
+├── package.json
+└── tsconfig.json

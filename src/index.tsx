@@ -10,7 +10,7 @@ import 'primereact/resources/themes/lara-light-indigo/theme.css'; // Replace wit
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import { Provider } from 'react-redux';
-import { store } from './store/taskStore';
+import { store } from './redux/taskStore';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

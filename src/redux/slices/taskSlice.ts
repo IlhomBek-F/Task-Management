@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { deleteTask, getTasks, saveTask, completeTask as completeT, updateTask } from "../service";
-import { StateModel } from "../core/models/state-model";
-import { TaskModel } from "../core/models/task-model";
-import { AsyncThunkType } from "../core/enums/async-thunk-type";
+import { deleteTask, getTasks, saveTask, completeTask as completeT, updateTask } from "../../service";
+import { StateModel } from "../../core/models/state-model";
+import { TaskModel } from "../../core/models/task-model";
+import { AsyncThunkType } from "../../core/enums/async-thunk-type";
 
 const initialState = {
     tasks: [{} as TaskModel],

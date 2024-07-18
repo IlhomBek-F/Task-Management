@@ -1,13 +1,13 @@
 import { useState } from "react"
 import { FILTER_BY_STATUS_OPTIONS } from "../helpers"
-import ButtonElem from "../shared/Button"
-import Select from "../shared/Select"
-import DialogElem from "../shared/Dialog";
-import DatePickerElem from "../shared/DatePicker";
-import Form from "../shared/Form";
+import ButtonElem from "./shared/Button"
+import Select from "./shared/Select"
+import DialogElem from "./shared/Dialog";
+import DatePickerElem from "./shared/DatePicker";
+import Form from "./shared/Form";
 import TaskTable from "./TaskTable";
 import { useDispatch, useSelector } from "react-redux";
-import { AsyncThunkMap, filterByDate, filterByStatus } from "../Slice/taskSlice";
+import { AsyncThunkMap, filterByDate, filterByStatus } from "../redux/slices/taskSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { StateModel } from "../core/models/state-model";
 import { TaskModel } from "../core/models/task-model";
