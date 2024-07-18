@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import './styles/index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { PrimeReactProvider } from 'primereact/api';
+
 // PrimeReact styles
 import 'primereact/resources/themes/lara-light-indigo/theme.css'; // Replace with your theme
 import 'primereact/resources/primereact.min.css';

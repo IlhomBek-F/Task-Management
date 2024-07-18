@@ -12,6 +12,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import { StateModel } from "../core/models/state-model";
 import { TaskModel } from "../core/models/task-model";
 import { AsyncThunkType } from "../core/enums/async-thunk-type";
+import '../styles/header.css';
 
 function Header() {
     const selectedStatus = useSelector((state: StateModel) => state.selectedStatus)
@@ -33,18 +34,23 @@ function Header() {
 
     return (
     <section>
-        <header className="flex justify-between items-center  bg-white w-[62rem] rounded-md p-2 mb-4">
+        <header className="header">
            <h1 className="text-2xl">Tasks</h1>
-            <div className="flex justify-between w-[29rem]">
-           <Select options={FILTER_BY_STATUS_OPTIONS} selected={selectedStatus} handleSelect={(status: number) => dispatch(filterByStatus(status))} placeholder='Filter'/>
-           <DatePickerElem date={date} setDate={setDate}/>
-           <ButtonElem label="Add new" handleClick={() => setShow(true)} disabled={false}/>
+            <div className="container">
+           <Select options={FILTER_BY_STATUS_OPTIONS} 
+                   selected={selectedStatus} 
+                   handleSelect={(status: number) => dispatch(filterByStatus(status))} 
+                   placeholder='Filter'/>
+           <DatePickerElem date={date} 
+                           setDate={setDate}/>
+           <ButtonElem label="Add new" 
+                       handleClick={() => setShow(true)} 
+                       disabled={false}/>
            {show && (
             <DialogElem header={'New task'}>
-               <Form 
-                  edit={false} 
-                  handleSaveClick={handleSaveClick} 
-                  handleCancelClick={() => setShow(false)}
+               <Form edit={false} 
+                     handleSaveClick={handleSaveClick} 
+                     handleCancelClick={() => setShow(false)}
                 />
            </DialogElem>
            )}

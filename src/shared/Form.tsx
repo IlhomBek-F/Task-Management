@@ -3,34 +3,34 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import ButtonElem from './Button';
 import DatePickerElem from './DatePicker';
 import { Controller, useForm } from 'react-hook-form';
-
-interface FormProps {
-    updatingValue?: any,
-    edit: boolean,
-    handleCancelClick: () => void;
-    handleSaveClick?: (value: any) => void;
-    handleUpdateClick?: (value: any) => void;
-}
+import '../styles/form.css';
+import { FormProps } from '../core/models/form-props-model';
 
 function Form({updatingValue, edit, handleSaveClick, handleUpdateClick, handleCancelClick}: FormProps) {
     const {assign = '', dueTo = new Date().toLocaleDateString(), task = '', id} = updatingValue || {};
-    const {control, register, getValues } = useForm({
+
+    const {control, register, handleSubmit, getFieldState, formState} = useForm({
         defaultValues: { assign, dueTo, task}
-    })
+    });
+
+    const assignFieldInvalid = getFieldState('assign', formState).invalid;
+    const taskFieldInvalid = getFieldState('task', formState).invalid;
 
     const handleEvent = (edit ? handleUpdateClick : handleSaveClick) as Function
+    const onSubmit = (data: any) => handleEvent({...data, id});
 
     return (
     <>
      <form>
-         <label htmlFor="assign" className='flex flex-col mb-3'>Assign
-         <InputText id="assign" 
+         <label htmlFor="assignFor" className='label'>Assign *
+         <InputText 
                     aria-describedby="username-help" 
                     className='mt-2' 
+                    invalid={assignFieldInvalid}
                     {...register('assign', {required: true})}/>
          </label>
-         <label htmlFor="due" 
-                className='flex flex-col mb-3'>Due to
+         <label htmlFor="dueTo" 
+                className='label'>Due to *
         <Controller name='dueTo' 
                     control={control}
                     rules={{required: true}}
@@ -40,11 +40,12 @@ function Form({updatingValue, edit, handleSaveClick, handleUpdateClick, handleCa
                   />
          </label>
          <label htmlFor="task" 
-                className='flex flex-col mb-3'>Task
+                className='label'>Task *
          <InputTextarea 
                 rows={5} 
                 cols={30} 
                 className='mt-2' 
+                invalid={taskFieldInvalid}
                 {...register('task', {required: true})}/>
          </label>
       </form>
@@ -52,7 +53,7 @@ function Form({updatingValue, edit, handleSaveClick, handleUpdateClick, handleCa
          <ButtonElem label={edit ? 'update' : 'save'}
                      className="mr-2"
                      disabled={false} 
-                     handleClick={() => handleEvent({...getValues(), id})}/>
+                     handleClick={handleSubmit(onSubmit)}/>
          <ButtonElem label='cancel' 
                      disabled={false} 
                      handleClick={() => handleCancelClick()}/>

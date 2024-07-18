@@ -1,7 +1,6 @@
 import { ConfirmDialog } from 'primereact/confirmdialog';
-import './App.css';
 import Header from './components/Header';
-import  "./index.css"
+import  "./styles/index.css"
 
 function App() {
   return (

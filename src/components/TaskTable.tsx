@@ -13,16 +13,18 @@ import { AsyncThunkMap } from "../Slice/taskSlice";
 import { StateModel } from "../core/models/state-model";
 import { AsyncThunkType } from "../core/enums/async-thunk-type";
 import { TaskModel } from "../core/models/task-model";
+import { Tooltip } from "primereact/tooltip";
+import '../styles/data-table.css';
 
 function TaskTable() {
     const dispatch = useDispatch<any>();
     const  loading = useSelector((state: StateModel) => state.loading);
     const  tasks = useSelector((state: StateModel) => state.tasks);
-    const [show, setShow] = useState({show: false, data: null});
+    const [dialogState, setShow] = useState({visible: false, data: null});
     const toast = useRef<Toast>(null);
- 
+
     useEffect(() => {
-        dispatch(AsyncThunkMap.get(AsyncThunkType.FETCH_TASKS)())
+        dispatch(AsyncThunkMap.get(AsyncThunkType.FETCH_TASKS)());
     }, [])
 
     const handleUpdateClick = (data: TaskModel) => {
@@ -30,7 +32,7 @@ function TaskTable() {
         .unwrap(unwrapResult)
         .then(() => {
             toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Task updated', life: 2000 });
-            setShow({show: false, data: null})
+            setShow({visible: false, data: null})
         })
     }
 
@@ -48,7 +50,7 @@ function TaskTable() {
       return (
         <>
         <Button icon="pi pi-check-circle" rounded text severity={data.completed ? 'success' : 'secondary'} onClick={() => handleComplete(data)}/>
-        <Button icon="pi pi-pencil" rounded text onClick={() => setShow({show: true, data})}/>
+        <Button icon="pi pi-pencil" rounded text onClick={() => setShow({visible: true, data})}/>
         <Button icon="pi pi-times" rounded text severity="danger" aria-label="Cancel" onClick={() => deleteConfirm(data.id)}/>
         </>
       )
@@ -63,31 +65,43 @@ function TaskTable() {
             acceptClassName: 'p-button-danger',
             draggable: false,
             accept: () => dispatch(AsyncThunkMap.get(AsyncThunkType.DELETE_TASK)(deletedTaskId)),
-            reject: () => setShow({show: false, data: null})
+            reject: () => setShow({visible: false, data: null})
         });
     };
 
     const footer = `In total there are ${tasks ? tasks.length : 0} tasks.`;
-
+    const skeleton = loading && <Skeleton />
     return (
         <>
         <Toast ref={toast} />
         <DataTable value={tasks} footer={!loading && tasks.length && footer || ''} emptyMessage={'No available tasks'}
+                 paginator={tasks.length > 5} rows={5}
                  dataKey="id">
-                <Column field="assign" header="Assigned" body={loading && <Skeleton />}></Column>
-                <Column field="dueTo" header="Due To" body={loading && <Skeleton />}></Column>
-                <Column field="task" header="Task" body={loading && <Skeleton />}></Column>
+                <Column field="assign" header="Assigned" body={skeleton}></Column>
+                <Column field="dueTo" header="Due To" body={skeleton}></Column>
+                <Column field="task" header="Task" body={({task}) => {
+
+                    return skeleton || <>
+                    <Tooltip target='.tooltip' style={{width: '540px'}}></Tooltip>
+                    <p data-pr-tooltip={task} 
+                       data-pr-hidedelay={100}
+                       data-pr-position="bottom" 
+                       className={`${task.length > 41 ? 'tooltip' : ''} ellipsis`}>{task}
+                    </p>
+                </>
+                }}
+                ></Column>
                 <Column field=""  headerStyle={{width: '180px'}} 
                 body={loading && <Skeleton /> || columnActions}
                 ></Column>
          </DataTable>
-        {show.show && (
+        {dialogState.visible && (
             <DialogElem header={'Update task'}>
               <Form 
                 edit={true} 
-                updatingValue={show.data}
+                updatingValue={dialogState.data}
                 handleUpdateClick={handleUpdateClick}
-                handleCancelClick={() => setShow({show: false, data: null})}
+                handleCancelClick={() => setShow({visible: false, data: null})}
               />
            </DialogElem>
         )}

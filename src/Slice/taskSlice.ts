@@ -52,20 +52,15 @@ const taskSlice = createSlice({
             state.tasks = payload
         })
 
-        builder.addCase(AsyncThunkMap.get(AsyncThunkType.DELETE_TASK).pending, (state: StateModel) => {
-            state.loading = true
-        }).addCase(AsyncThunkMap.get(AsyncThunkType.DELETE_TASK).fulfilled, (state: StateModel, { payload }) => {
+        builder.addCase(AsyncThunkMap.get(AsyncThunkType.DELETE_TASK).fulfilled, (state: StateModel, { payload }) => {
             state.tasks = payload;
-            state.loading = false;
-        }).addCase(AsyncThunkMap.get(AsyncThunkType.DELETE_TASK).rejected, (state: StateModel) => {
-            state.loading = false;
         })
 
-        builder.addCase(AsyncThunkMap.get(AsyncThunkType.COMPLETE_TASK).fulfilled, (state: StateModel, { payload }) => {
+        builder.addCase(AsyncThunkMap.get(AsyncThunkType.COMPLETE_TASK).fulfilled, (state: StateModel, action) => {
+            state.tasks = action.payload;
+            taskSlice.caseReducers.filterByStatus(state, { payload: state.selectedStatus, type: action.type })
+        }).addCase(AsyncThunkMap.get(AsyncThunkType.COMPLETE_TASK).rejected, (state: StateModel, { payload }) => {
             state.tasks = payload;
-        }).addCase(AsyncThunkMap.get(AsyncThunkType.COMPLETE_TASK).rejected, (state: StateModel, { payload, dispatch }) => {
-            state.tasks = payload;
-            dispatch(filterByStatus(state.selectedStatus))
         })
 
         builder.addCase(AsyncThunkMap.get(AsyncThunkType.UPDATE_TASK).fulfilled, (state: StateModel, { payload }) => {

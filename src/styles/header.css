@@ -1,0 +1,7 @@
+.header {
+    @apply flex justify-between items-center  bg-white w-[62rem] rounded-md p-2 mb-4
+}
+
+.container {
+    @apply flex justify-between w-[29rem]
+}

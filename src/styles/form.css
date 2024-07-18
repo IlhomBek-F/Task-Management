@@ -1,0 +1,4 @@
+
+.label {
+    @apply flex flex-col mb-3
+}
