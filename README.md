@@ -46,30 +46,30 @@ The app should now be running on http://localhost:3000
 │ │ ├── Header.tsx
 │ │ ├── TaskTable.tsx
 │ │ └── shared/
-│ │ ├── ButtonElem.tsx
-│ │ ├── DatePickerElem.tsx
-│ │ ├── DialogElem.tsx
-│ │ ├── Form.tsx
-│ │ └── Select.tsx
+│ │    ├── ButtonElem.tsx
+│ │    ├── DatePickerElem.tsx
+│ │    ├── DialogElem.tsx
+│ │    ├── Form.tsx
+│ │    └── Select.tsx
 │ ├── core/
-│ │ ├── enums/
-│ │ │ └── async-thunk-type.ts
-│ │ ├── models/
-│ │ │ └── form-props-model.ts
-│ │ │ └── state-model.ts
-│ │ │ └── task-model.ts
+│ │  ├── enums/
+│ │  │   └── async-thunk-type.ts
+│ │  ├── models/
+│ │  │   └── form-props-model.ts
+│ │  │   └── state-model.ts
+│ │  │   └── task-model.ts
 │ ├── redux/
-│ │ ├── slices/
-│ │ │ └── tasksSlice.ts
-│ │ └── store.ts
+│ │   ├── slices/
+│ │   │   └── tasksSlice.ts
+│ │   └── store.ts
 │ ├── App.tsx
 │ ├── index.tsx
 │ └── styles/
-│ └── index.css
-│ │ ├── data-table.css
-│ │ ├── form.css
-│ │ ├── header.css
-│ │ ├── index.css
+│     └── index.css
+│     ├── data-table.css
+│     ├── form.css
+│     ├── header.css
+│     ├── index.css
 ├── README.md
 ├── package.json
 └── tsconfig.json
