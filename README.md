@@ -39,6 +39,7 @@ The app should now be running on http://localhost:3000
 
 ## Folder Structure
 
+```
 ├── public/
 ├── src/
 │ ├── components/
@@ -72,3 +73,4 @@ The app should now be running on http://localhost:3000
 ├── README.md
 ├── package.json
 └── tsconfig.json
+```
